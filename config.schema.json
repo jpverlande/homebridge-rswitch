@@ -1,0 +1,268 @@
+{
+  "pluginAlias": "RPi-RSwitch",
+  "pluginType": "platform",
+  "singular": true,
+  "headerDisplay": "Homebridge plugin for RPi-controoled Remote Switch",
+  "footerDisplay": "",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "description": "Plugin name as displayed in the homebridge log.",
+        "type": "string",
+        "required": true,
+        "default": "RPi-RSwitch"
+      },
+      "hosts": {
+        "title": "Raspberry Pis",
+        "notitle": true,
+        "type": "array",
+        "items": {
+          "description": "<b>Raspberry Pi</b>",
+          "type": "object",
+          "properties": {
+            "host": {
+              "title": "Host",
+              "description": "IP address or hostname and port of the Pi's pigpiod server.  E.g.: 'localhost:8888'.",
+              "type": "string",
+              "required": true
+            },
+            "name": {
+              "title": "Name",
+              "description": "The hostname of the Raspberry Pi.",
+              "type": "string"
+            },
+            "hidden": {
+              "title": "Hidden",
+              "description": "Do not expose a service for the Raspberry Pi itself.",
+              "type": "boolean"
+            },
+            "noSmokeSensor": {
+              "title": "No Smoke Sensor",
+              "description": "Do not expose a Smoke Sensor service for the Raspberry Pi itself.",
+              "type": "boolean"
+            },
+            "devices": {
+              "title": "Devices",
+              "notitle": true,
+              "type": "array",
+              "items":  {
+                "description": "<b>Device</b>",
+                "type": "object",
+                "properties": {
+                  "device": {
+                    "title": "Device",
+                    "description": "The type of the device.",
+                    "type": "string",
+                    "required": true,
+                    "oneOf": [
+                      {
+                        "title": "Blinkt",
+                        "enum": [ "blinkt" ]
+                      },
+                      {
+                        "title": "Button",
+                        "enum": [ "button" ]
+                      },
+                      {
+                        "title": "Contact Sensor",
+                        "enum": [ "contact" ]
+                      },
+                      {
+                        "title": "Fan SHIM",
+                        "enum": [ "fanshim" ]
+                      },
+                      {
+                        "title": "Light",
+                        "enum": [ "light" ]
+                      },
+                      {
+                        "title": "Motion Sensor",
+                        "enum": [ "motion" ]
+                      },
+                      {
+                        "title": "Servo Motor",
+                        "enum": [ "servo" ]
+                      },
+                      {
+                        "title": "Smoke Sensor",
+                        "enum": [ "smoke" ]
+                      },
+                      {
+                        "title": "Switch",
+                        "enum": [ "switch" ]
+                      },
+                      {
+                        "title": "Valve",
+                        "enum": [ "valve" ]
+                      }
+                    ]
+                  },
+                  "name": {
+                     "title": "Name",
+                     "description": "The HomeKit name of the device.",
+                     "type": "string"
+                  },
+                  "gpio": {
+                     "title": "GPIO",
+                     "description": "The BCM number of the GPIO pin (for: Button, Contact Sensor, Light, Servo Motor, Switch).",
+                     "type": "integer",
+                     "maximum": 31
+                  },
+                  "reversed": {
+                    "title": "Reversed",
+                    "description": "The device state is reversed (for: Button, Contact Sensor, Switch).",
+                    "type": "boolean"
+                  },
+                  "pulse": {
+                    "title": "Pulse",
+                    "description": "Time in ms to turn off the switch automatically (for: Switch).",
+                    "type": "integer",
+                    "minimum": 20,
+                    "maximum": 5000
+                  },
+                  "gpioClock": {
+                     "title": "GPIO Clock",
+                     "description": "The BCM number of the GPIO pin for the clock signal (for: Blinkt).",
+                     "type": "integer",
+                     "maximum": 31
+                  },
+                  "gpioData": {
+                     "title": "GPIO Data",
+                     "description": "The BCM number of the GPIO pin for the data signal (for: Blinkt).",
+                     "type": "integer",
+                     "maximum": 31
+                  },
+                  "nLeds": {
+                     "title": "# LEDs",
+                     "description": "The number LEDs (for: Blinkt).",
+                     "type": "integer"
+                  }
+                },
+                "allOf": [
+                  {
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "device": { "enum": ["blinkt", "fanshim"] }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "device": { "enum": ["button", "contact", "light", "motion", "servo", "smoke", "switch", "valve"] }
+                        },
+                        "required": ["gpio"]
+                      }
+                    ]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "gpio": {}
+                        },
+                        "properties": {
+                          "device": { "enum": ["button", "contact", "light", "motion", "servo", "smoke", "switch", "valve"] }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "gpio": { "not": {} }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "reversed": {}
+                        },
+                        "properties": {
+                          "device": { "enum": ["button", "contact", "light", "motion", "smoke", "switch", "valve"] }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "reversed": { "not": {} }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "gpioClock": {}
+                        },
+                        "properties": {
+                          "device": { "const": "blinkt" }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "gpioClock": { "not": {} }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "gpioData": {}
+                        },
+                        "properties": {
+                          "device": { "const": "blinkt" }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "gpioData": { "not": {} }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "nLeds": {}
+                        },
+                        "properties": {
+                          "device": { "const": "blinkt" }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "nLeds": { "not": {} }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "oneOf": [
+                      {
+                        "properties": {
+                          "pulse": {}
+                        },
+                        "properties": {
+                          "device": { "const": "switch" }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "pulse": { "not": {} }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

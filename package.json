@@ -1,0 +1,44 @@
+{
+  "name": "homebridge-rswitch",
+  "description": "Homebridge plugin for RPi-controlled Remote Switch",
+  "displayName": "Homebridge RSwitch",
+  "author": "JP Verlande",
+  "license": "Apache-2.0",
+  "version": "1.2.1",
+  "keywords": [
+    "homebridge-plugin",
+    "raspberrypi",
+    "raspberry",
+    "pi",
+    "pigpio",
+    "gpio",
+    "remote switch"
+  ],
+  "main": "index.js",
+  "bin": {
+    "rpi": "cli/rpi.js"
+  },
+  "engines": {
+    "homebridge": "^1.1.0",
+    "node": "^14.15.1"
+  },
+  "dependencies": {
+    "homebridge-lib": "^5.0.0"
+  },
+  "scripts": {
+    "prepare": "standard && rm -rf out && jsdoc -c jsdoc.json",
+    "test": "standard && echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpverlande/homebridge-rswitch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jpverlande/homebridge-rswitch/issues"
+  },
+  "homepage": "https://github.com/jpverlande/homebridge-rswitch#readme",
+  "funding": {
+    "type": "paypal",
+    "url": "https://www.paypal.me/jpverlande/EUR"
+  }
+}
